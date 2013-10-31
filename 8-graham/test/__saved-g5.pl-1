@@ -1,0 +1,132 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+use Factor;
+
+# my $n = new Math::GMP($test_number);
+sub Graham
+{
+    my $n = shift;
+
+    my $n_sq_factors = get_squaring_factors($n);
+
+    # The graham number of a perfect square is itself.
+    if (scalar(@$n_sq_factors) == 0)
+    {
+        return $n;
+    }
+
+    # %primes_to_ids_map maps each prime number to its ID. IDs are consective.
+    my (%primes_to_ids_map);
+    my $next_id = 0;
+
+    # @base is an array that for each ID of a prime number holds the 
+    # controlling vector for this number.
+    #
+    # This is in fact a matrix that is kept stair-shaped and canonized.
+    my (@base);
+
+    # Register all the primes in the squaring factors of $n
+    foreach my $p (@$n_sq_factors)
+    {
+        $primes_to_ids_map{$p} = ($next_id++);
+    }
+
+    # $n_vec is used to determine if $n can be composed out of the base's 
+    # vectors.
+    my $n_vec = $n_sq_factors;
+
+    for(my $i=$n+1;;$i++)
+    {
+        my $i_sq_factors = get_squaring_factors($i);
+
+        # $final_vec is the new vector to add after it was
+        # stair-shaped by all the controlling vectors in the base.
+
+        my $final_vec = $i_sq_factors;
+
+        foreach my $p (@$i_sq_factors)
+        {
+            if (!exists($primes_to_ids_map{$p}))
+            {
+                # Register a new prime number
+                $primes_to_ids_map{$p} = ($next_id++);
+            }
+            else
+            {
+                my $id = $primes_to_ids_map{$p};
+                if (defined($base[$id]))
+                {
+                    $final_vec = multiply_squaring_factors($final_vec, $base[$id]);
+                }
+            }
+        }
+
+        # Get the minimal ID and its corresponding prime number
+        # in $final_vec.
+        my $min_id = -1;
+        my $min_p = 0;
+
+        foreach my $p (@$final_vec)
+        {
+            my $id = $primes_to_ids_map{$p};
+            if (($min_id < 0) || ($min_id > $id))
+            {
+                $min_id = $id;
+                $min_p = $p;
+            }
+        }
+
+        if ($min_id >= 0)
+        {
+            # Assign $final_vec as the controlling vector for this prime
+            # number
+            $base[$min_id] = $final_vec;
+            # Canonize the rest of the vectors with the new vector.
+            for(my $j=0;$j<scalar(@base);$j++)
+            {
+                next if ($j == $min_id);
+                next if (! defined($base[$j]));
+                if (grep { $_ == $min_p } @{$base[$j]})
+                {
+                    $base[$j] = multiply_squaring_factors($base[$j], $final_vec);
+                }
+            }
+        }
+
+        # A closure to print the base. It is not used but can prove useful.
+        my $print_base = sub {
+            print "Base=\n\n";
+            for(my $j=0;$j<scalar(@base);$j++)
+            {
+                next if (! defined($base[$j]));
+                print "base[$j] (" . join(" * ", @{$base[$j]}) . ")\n";
+            }
+            print "\n\n";
+        };
+
+        # Check if we can form $n
+
+        while (scalar(@$n_vec))
+        {
+            # Assing $id as 
+            my @ids_vec = (sort { $a <=> $b } @primes_to_ids_map{@$n_vec});
+            my $id = $ids_vec[0];
+            last if (!defined($base[$id]));
+            $n_vec = multiply_squaring_factors($n_vec, $base[$id]);
+        }
+        if (scalar(@$n_vec) == 0)
+        {
+            return $i;
+        }
+    }
+}
+
+my $start = shift;
+my $end = shift || $start;
+foreach my $n ($start .. $end)
+{
+    print "G($n) = " . Graham($n) . "\n";
+}
+

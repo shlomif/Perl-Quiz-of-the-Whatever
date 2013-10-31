@@ -1,0 +1,65 @@
+We can represent a non-directed graph[1] (in the computer science sense) by
+the following representation:
+
+1. Every node (or vertex) will have an integer assinged to it.
+
+2. Every link (or edge) will be represented as a pair of two integers - those
+that were assigned to the the nodes it connects. Their order doesn't matter,
+but as you see below should be preserved.
+
+3. The entire graph will be represented as a list of such pairs representing
+all the links of the graph.
+
+So for example the following graph:
+
+A--B--F       D--C
+   | /
+   |/
+   E
+
+Can be represnted by the following array ref:
+
+[[$A,$B],[$B,$E],[$B,$F],[$D,$C],[$F,$E]]
+
+You should implement a function called "connected" that will receive such an
+input and return its connected components, where a connected component is such
+that for every two nodes in it, there's a path from one to the other. So for
+the graph above the function will return:
+
+[
+    [[$A,$B],[$B,$E],[$B,$F],[$F,$E]],
+    [[$D,$C]],
+]
+
+One constraint is that the output should be ordered according to the order
+of the links in the input. I.e: 1) the order of each link in each connected
+component correspondence to their order in the input, and 2) the order of
+the first links from each connected components corresponds to their order
+in the input.
+
+Input:
+------
+
+connected($list), where $list = \@list, and @list is made entirely of [$i,$j]
+where $i and $j are integers.
+
+Output:
+-------
+
+$ret = connected($list) where:
+
+    @comp1 = [ [$i1,$j1], [$i2, $j2], [$i3, $j3] ];
+    @comp2 = [ [$k1,$l1], [$k2, $l2],... ];
+    @components = ( \@comp1, \@comp2, ... );
+    $ret = [ @components ];
+
+---------------------------
+
+Have fun!
+
+Regards,
+
+    Shlomi Fish
+
+[1] - http://en.wikipedia.org/wiki/Graph_theory
+

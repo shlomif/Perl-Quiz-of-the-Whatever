@@ -1,0 +1,75 @@
+IMPORTANT: Please do not post solutions, hints, or other spoilers
+        until at least 60 hours after the date of this message.
+        Thanks.
+
+IMPORTANTE: Por favor, no enviéis soluciones, pistas, o cualquier otra
+        cosa que pueda echar a perder la resolución del problema hasta
+        que hayan pasado por lo menos 60 horas desde el envío de este
+        mensaje. Gracias.
+
+IMPORTANT: S'il vous plaît, attendez au minimum 60 heures après la
+        date de ce message avant de poster solutions, indices ou autres
+        révélations. Merci.
+
+WICHTIG: Bitte schicken Sie keine Lösungen, Tipps oder Hinweise für
+        diese Aufgabe vor Ablauf von 60 Stunden nach dem Datum dieser
+        Mail. Danke.
+
+BELANGRIJK: Stuur aub geen oplossingen, hints of andere tips in de
+        eerste 60 uur na het verzendingstijdstip van dit
+        bericht. Waarvoor dank.
+
+VNIMANIE: Pozhalujsta ne shlite reshenija, nameki na reshenija, i
+        voobshe lyubye podskazki v techenie po krajnej mere 60 chasov
+        ot daty etogo soobshenija.  Spasibo.
+
+Qing3 Zhu4Yi4: Qing3 Ning2 Deng3Dao4 Jie1Dao4 Ben3 Xin4Xi2 Zhi1Hou4 60
+        Xiao3Shi2, Zai4 Fa1Biao3 Jie3Da2, Ti2Shi4, Huo4 Qi2Ta1 Hui4
+        Xie4Lou4 Da2An4 De5 Jian4Yi4.  Xie4Xie4.
+
+-----------------------------------------------------------------------
+
+You are given a set of classes: C[1] to C[N[C]] and a set of lessons:
+L[1] to L[N[L]]. You are also given a schedule in which for each class
+and for each lesson it is specified whether the class studies at that
+lesson. For example:
+
+ L  1  2  3  4  5
+C
+1   X  X
+2      X  X     X
+3   X        X
+
+Means that class 1 studies at lessons 1 and 2, class 2 at lessons 2 and
+3 and class 3 at lessons 1 and 4.
+
+Now, you have to find a minimal assignment of teachers to the classes,
+(i.e: f : C -> T) so that every class is taught by one and only one teacher,
+and every teacher teaches at most one class at every lesson.
+
+In the example above, teacher 1 can teach class 1 and teacher 2 can
+teach classes 2 and 3.
+
+More Perlishly:
+
+Write a function:
+my $vec = allocate_minimal_teachers($num_classes, $num_lessons, $class_lectures);
+
+Where:
+
+$num_classes - the number of classes.
+$num_lessons - the number of lessions
+$class_lectures->[$c]->[$l] - a boolean that specifies if class $c studies
+at lesson $l.
+
+$vec is the allocation of classes to teachers. $vec->[$c] == $t means that
+teacher No. $t teaches class $c.
+
+In our example the following Perl code:
+
+my $table = [[qw(1 1 0 0 0)],[qw(0 1 1 0 1)],[qw(1 0 0 1 0)]];
+my $vec = allocate_minimal_teachers(3, 5, $table);
+
+Should return [0,1,1] (or [1,0,0]) in $vec.
+
+
