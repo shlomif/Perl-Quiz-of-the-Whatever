@@ -1,0 +1,8 @@
+=encoding utf8
+
+=head1 Perl Quiz of the Whatever (QOTW) Code and Challenges
+
+This repository contains Shlomi Fish’s code for the Perl QOTW
+(Quiz-of-the-week / Quiz-of-the-whatever).
+
+=cut
